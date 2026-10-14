@@ -302,6 +302,7 @@ onMounted(fetchLessons)
     <header class="page-header">
       <h1>After-School Class Booking</h1>
       <p>Browse lessons, sort your options, and book classes with secure checkout.</p>
+      <p class="info">API: {{ API_BASE_URL }}</p>
     </header>
 
     <main class="layout">
@@ -347,6 +348,7 @@ onMounted(fetchLessons)
           </label>
 
           <button type="submit">Apply filters</button>
+          <button type="button" class="secondary" @click="fetchLessons">Reload lessons</button>
         </form>
 
         <p v-if="loading" class="info">Loading lessons...</p>
