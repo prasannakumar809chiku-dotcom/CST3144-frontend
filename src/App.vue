@@ -160,6 +160,14 @@ function removeFromCart(lessonId) {
     return
   }
 
+  function resetFilters() {
+    searchTerm.value = ''
+    teacherFilter.value = ''
+    sortBy.value = 'subject'
+    sortDirection.value = 'asc'
+    fetchLessons()
+  }
+
   const lesson = lessons.value.find((item) => item.id === lessonId)
   if (lesson) {
     lesson.spaces += 1
@@ -349,6 +357,7 @@ onMounted(fetchLessons)
 
           <button type="submit">Apply filters</button>
           <button type="button" class="secondary" @click="fetchLessons">Reload lessons</button>
+          <button type="button" class="secondary" @click="resetFilters">Reset filters</button>
         </form>
 
         <p v-if="loading" class="info">Loading lessons...</p>
