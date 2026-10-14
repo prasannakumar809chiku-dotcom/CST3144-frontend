@@ -82,6 +82,13 @@ button:disabled {
   opacity: 0.6;
 }
 
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
 .lesson-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -92,6 +99,7 @@ button:disabled {
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   padding: 0.75rem;
+  background: #ffffff;
 }
 
 .lesson-card img {
