@@ -271,7 +271,11 @@ async function submitOrder() {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ spaces: item.lesson.spaces })
+          body: JSON.stringify({
+            lessonId: item.lessonId,
+            spaces: item.lesson.spaces,
+            decrementBy: item.quantity
+          })
         })
 
         if (!response.ok) {
