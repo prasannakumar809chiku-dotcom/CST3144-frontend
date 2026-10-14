@@ -181,6 +181,16 @@ async function loadEnrolment(lessonId) {
       error: '',
       data: null
     }
+
+    function formatEnrolment(data) {
+      if (!data || typeof data !== 'object') {
+        return 'No enrolment details available.'
+      }
+
+      return Object.entries(data)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(' · ')
+    }
   }
 
   try {
@@ -357,7 +367,7 @@ onMounted(fetchLessons)
               {{ enrolmentState[lesson.id].error }}
             </p>
             <p v-else-if="enrolmentState[lesson.id]?.data" class="info">
-              Enrolment: {{ JSON.stringify(enrolmentState[lesson.id].data) }}
+              Enrolment: {{ formatEnrolment(enrolmentState[lesson.id].data) }}
             </p>
           </article>
         </div>
