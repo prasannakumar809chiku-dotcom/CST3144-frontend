@@ -303,14 +303,19 @@ onMounted(fetchLessons)
         <h2>Lessons</h2>
 
         <form class="filters" @submit.prevent="fetchLessons">
-          <label>
+          <label for="search-input">
             Search
-            <input v-model="searchTerm" type="text" placeholder="Search by subject or keyword" />
+            <input
+              id="search-input"
+              v-model="searchTerm"
+              type="text"
+              placeholder="Search by subject or keyword"
+            />
           </label>
 
-          <label>
+          <label for="teacher-filter">
             Teacher
-            <select v-model="teacherFilter">
+            <select id="teacher-filter" v-model="teacherFilter">
               <option value="">All teachers</option>
               <option v-for="teacher in teacherOptions" :key="teacher" :value="teacher">
                 {{ teacher }}
@@ -318,18 +323,18 @@ onMounted(fetchLessons)
             </select>
           </label>
 
-          <label>
+          <label for="sort-by">
             Sort by
-            <select v-model="sortBy">
+            <select id="sort-by" v-model="sortBy">
               <option v-for="option in sortOptions" :key="option.value" :value="option.value">
                 {{ option.label }}
               </option>
             </select>
           </label>
 
-          <label>
+          <label for="sort-direction">
             Direction
-            <select v-model="sortDirection">
+            <select id="sort-direction" v-model="sortDirection">
               <option value="asc">Ascending</option>
               <option value="desc">Descending</option>
             </select>
@@ -380,7 +385,7 @@ onMounted(fetchLessons)
       <aside class="cart-panel">
         <h2>Cart ({{ cartCount }})</h2>
 
-        <ul v-if="cartItems.length" class="cart-list">
+        <ul v-if="cartItems.length" class="cart-list" aria-live="polite">
           <li v-for="item in cartItems" :key="item.lessonId">
             <div>
               <strong>{{ item.lesson.subject }}</strong>
@@ -397,15 +402,27 @@ onMounted(fetchLessons)
           <h3>Checkout</h3>
           <p v-if="checkoutMessage" class="success">{{ checkoutMessage }}</p>
 
-          <label>
+          <label for="checkout-name">
             Name
-            <input v-model="checkout.name" type="text" placeholder="Letters and spaces only" required />
+            <input
+              id="checkout-name"
+              v-model="checkout.name"
+              type="text"
+              placeholder="Letters and spaces only"
+              required
+            />
           </label>
           <p v-if="checkout.name && !nameIsValid" class="error">Name must contain letters and spaces only.</p>
 
-          <label>
+          <label for="checkout-phone">
             Phone
-            <input v-model="checkout.phone" type="tel" placeholder="Numbers only" required />
+            <input
+              id="checkout-phone"
+              v-model="checkout.phone"
+              type="tel"
+              placeholder="Numbers only"
+              required
+            />
           </label>
           <p v-if="checkout.phone && !phoneIsValid" class="error">Phone number must contain numbers only.</p>
 
