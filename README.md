@@ -52,6 +52,14 @@ Copy `.env.example` to `.env` if you need local overrides.
 - Loading, empty, error, and success states
 - Responsive and accessible UI controls using Vue methods, `computed`, `v-model`, and event handling
 
+## Vue implementation notes
+
+- **Methods**: `fetchLessons`, `addToCart`, `removeFromCart`, `loadEnrolment`, and `submitOrder` handle API calls and user actions.
+- **Computed properties**: `sortedLessons`, `teacherOptions`, `cartItems`, `cartCount`, and `cartTotal` keep UI state derived from source data.
+- **`v-for` usage**: lessons and cart items are rendered with `v-for` loops keyed by stable lesson IDs.
+- **`v-model` usage**: search, teacher/sort controls, and checkout inputs use two-way binding.
+- **Event handling**: buttons and forms use `@click` and `@submit.prevent` handlers for add/remove, filtering, enrolment fetch, and checkout.
+
 ## API contract used
 
 ### `GET /lessons`
