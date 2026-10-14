@@ -7,7 +7,8 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL
 const lessons = ref([])
 const loading = ref(false)
 const errorMessage = ref('')
-const successMessage = ref('')
+const lessonsMessage = ref('')
+const checkoutMessage = ref('')
 
 const searchTerm = ref('')
 const teacherFilter = ref('')
@@ -48,13 +49,14 @@ function normalizeLesson(rawLesson) {
 async function fetchLessons() {
   loading.value = true
   errorMessage.value = ''
-  successMessage.value = ''
+  lessonsMessage.value = ''
 
   try {
     const params = new URLSearchParams()
 
     if (searchTerm.value.trim()) {
       params.set('search', searchTerm.value.trim())
+      params.set('q', searchTerm.value.trim())
     }
 
     if (teacherFilter.value.trim()) {
@@ -72,7 +74,7 @@ async function fetchLessons() {
     lessons.value = Array.isArray(data) ? data.map(normalizeLesson).filter((lesson) => lesson.id) : []
 
     if (lessons.value.length === 0) {
-      successMessage.value = 'No lessons match your filters right now.'
+      lessonsMessage.value = 'No lessons match your filters right now.'
     }
   } catch (error) {
     errorMessage.value = error.message || 'Something went wrong while loading lessons.'
@@ -88,7 +90,21 @@ const teacherOptions = computed(() => {
 })
 
 const sortedLessons = computed(() => {
-  const sorted = [...lessons.value]
+  const searched = lessons.value.filter((lesson) => {
+    const keyword = searchTerm.value.trim().toLowerCase()
+    const teacher = teacherFilter.value.trim().toLowerCase()
+
+    const keywordMatch = !keyword ||
+      lesson.subject.toLowerCase().includes(keyword) ||
+      lesson.location.toLowerCase().includes(keyword) ||
+      lesson.description.toLowerCase().includes(keyword)
+
+    const teacherMatch = !teacher || lesson.teacher.toLowerCase().includes(teacher)
+
+    return keywordMatch && teacherMatch
+  })
+
+  const sorted = [...searched]
   sorted.sort((a, b) => {
     const first = a[sortBy.value]
     const second = b[sortBy.value]
@@ -196,7 +212,7 @@ async function loadEnrolment(lessonId) {
 }
 
 async function submitOrder() {
-  successMessage.value = ''
+  checkoutMessage.value = ''
   errorMessage.value = ''
 
   if (cartItems.value.length === 0) {
@@ -254,7 +270,7 @@ async function submitOrder() {
 
     cart.value = {}
     checkout.value = { name: '', phone: '' }
-    successMessage.value = 'Order placed successfully. Thank you for your booking!'
+    checkoutMessage.value = 'Order placed successfully. Thank you for your booking!'
   } catch (error) {
     errorMessage.value = error.message || 'Unable to complete checkout right now.'
   } finally {
@@ -314,7 +330,7 @@ onMounted(fetchLessons)
 
         <p v-if="loading" class="info">Loading lessons...</p>
         <p v-else-if="errorMessage" class="error">{{ errorMessage }}</p>
-        <p v-else-if="successMessage" class="success">{{ successMessage }}</p>
+        <p v-else-if="lessonsMessage" class="success">{{ lessonsMessage }}</p>
         <p v-if="!loading && lessons.length > 0 && lessons.length < 10" class="info">
           Showing {{ lessons.length }} lessons from the API.
         </p>
@@ -369,6 +385,7 @@ onMounted(fetchLessons)
 
         <form class="checkout" @submit.prevent="submitOrder">
           <h3>Checkout</h3>
+          <p v-if="checkoutMessage" class="success">{{ checkoutMessage }}</p>
 
           <label>
             Name
