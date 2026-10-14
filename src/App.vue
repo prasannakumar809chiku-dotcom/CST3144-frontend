@@ -241,11 +241,13 @@ async function submitOrder() {
     const orderPayload = {
       name: checkout.value.name.trim(),
       phone: checkout.value.phone.trim(),
+      lessonIds: cartItems.value.map((item) => item.lessonId),
       items: cartItems.value.map((item) => ({
         lessonId: item.lessonId,
         subject: item.lesson.subject,
         quantity: item.quantity,
-        price: item.lesson.price
+        price: item.lesson.price,
+        spaces: item.quantity
       })),
       total: cartTotal.value
     }
